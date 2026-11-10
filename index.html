@@ -17,6 +17,11 @@
   </script>
 
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Scripts are deferred so they never block rendering -->
+  <script src="js/config.js" defer></script>
+  <script src="js/data.js" defer></script>
+  <script src="js/script.js" defer></script>
 </head>
 <body>
 
@@ -314,7 +319,5 @@
     </div>
   </dialog>
 
-  <script src="js/data.js"></script>
-  <script src="js/script.js"></script>
 </body>
 </html>
