@@ -3,13 +3,14 @@
    Everything here comes from my ITD 211 Digital Visualization design journal
    (term 251): the three projects, three selected assignments.
    The objectives, process notes and reflections are the journal's own text.
-   `kind` is "Project" or "Assignment".
+   `kind` is "Project" or "Assignment"; `sequence` is the journal order.
    ========================================================================== */
 
 /* eslint-disable no-unused-vars */
 var PROJECTS = [
   {
     id: 'hidden-gate',
+    sequence: 1,
     title: 'Hidden Gate Game',
     kind: 'Project',
     year: 2025,
@@ -21,6 +22,7 @@ var PROJECTS = [
   },
   {
     id: 'unidine',
+    sequence: 2,
     title: 'UniDine: Smart Meal Planning App',
     kind: 'Project',
     year: 2025,
@@ -32,6 +34,7 @@ var PROJECTS = [
   },
   {
     id: 'hero-journey',
+    sequence: 3,
     title: 'The Hero Journey',
     kind: 'Project',
     year: 2025,
@@ -43,6 +46,7 @@ var PROJECTS = [
   },
   {
     id: 'taif-rose-perfume-branding',
+    sequence: 4,
     title: 'Taif Rose Perfume Branding',
     kind: 'Project',
     year: 2025,
@@ -54,6 +58,7 @@ var PROJECTS = [
   },
   {
     id: '3d-hotel-letter-h',
+    sequence: 5,
     title: '3D Hotel – Letter H Concept',
     kind: 'Project',
     year: 2025,
@@ -65,6 +70,7 @@ var PROJECTS = [
   },
   {
     id: 'tarout-palm-island',
+    sequence: 6,
     title: 'Tarout Palm Island',
     kind: 'Project',
     year: 2025,
@@ -78,3 +84,20 @@ var PROJECTS = [
 
 /* Filter chips shown above the list. "All" is added by the script. */
 var PROJECT_FILTERS = ['Blender', 'Photoshop', 'InDesign'];
+
+/* Sort options for the <select>. `compare` receives two projects. */
+var PROJECT_SORTS = [
+  { id: 'course', label: 'Journal order', compare: function (a, b) { return a.sequence - b.sequence; } },
+  { id: 'title-asc', label: 'Title A–Z', compare: function (a, b) { return a.title.localeCompare(b.title); } },
+  { id: 'title-desc', label: 'Title Z–A', compare: function (a, b) { return b.title.localeCompare(a.title); } },
+  {
+    id: 'kind',
+    label: 'Projects first',
+    compare: function (a, b) {
+      if (a.kind !== b.kind) {
+        return a.kind === 'Project' ? -1 : 1;
+      }
+      return a.sequence - b.sequence;
+    }
+  }
+];

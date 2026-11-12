@@ -13,6 +13,7 @@
    11. Footer
    12. Responsive
    13. Project controls, notes popup, form feedback, reveal
+   14. Sort control, in-class exercises, weather line
    ========================================================================== */
 
 /* Montserrat is served from this repository (assets/fonts) so the page makes
@@ -1181,6 +1182,65 @@ h3 {
   transition-delay: 0.12s;
 }
 
+/* --------------------------------------------------------------------------
+   14. Sort control, in-class exercises, weather line
+   -------------------------------------------------------------------------- */
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Custom-looking <select> that keeps the native control underneath */
+.select-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.select-wrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: 0.5rem 1.6rem 0.5rem 0;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.select-wrap svg {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.select-wrap select:hover {
+  border-color: var(--text-muted);
+}
+
+.select-wrap select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* The open dropdown list is painted by the operating system, not by the page.
+   `color-scheme` above tells it which palette to use; these two declarations
+   are the fallback for browsers that paint the list on a white background and
+   would otherwise leave light text unreadable in dark mode. */
+.select-wrap select option {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
 @media (max-width: 768px) {
   .project-toolbar {
     gap: 0.9rem;
@@ -1188,6 +1248,16 @@ h3 {
 
   .project-search {
     flex-basis: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .toolbar-right {
+    width: 100%;
+  }
+
+  .project-search {
+    flex: 1 1 auto;
   }
 }
 

@@ -3,6 +3,7 @@
    1. State (remembered in localStorage)
    2. Theme toggle
    3. Mobile navigation
+   4. Projects: filter + sort + search, notes popup
    8. Scroll reveal
    9. Footer year
    10. Project image viewer (lightbox)
@@ -42,6 +43,14 @@
       /* Storage can be unavailable (private mode, quota). The page still
          works; it just won't remember choices. */
     }
+  }
+
+  function escapeHtml(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   /* ------------------------------------------------------------------
@@ -105,38 +114,51 @@
   });
 
   /* ------------------------------------------------------------------
-     3. Projects
-     The list is built from PROJECTS (js/data.js). The visitor can narrow
-     it with a filter chip or by typing; both are combined. Each item has
-     a "Process & notes" button that opens a popup with the full write-up.
+     4. Projects
+     Filter (chip) → search (text) → sort (select), in that order.
+     Filter and sort are remembered in state; the search box is not,
+     because a remembered search is confusing on the next visit.
      ------------------------------------------------------------------ */
   var projectList = document.getElementById('project-list');
   var filterBar = document.getElementById('project-filters');
+  var sortSelect = document.getElementById('project-sort');
   var searchInput = document.getElementById('project-search');
   var emptyState = document.getElementById('project-empty');
   var resultCount = document.getElementById('project-count');
   var clearButton = document.getElementById('project-clear');
-
-  var activeFilter = 'All';
   var query = '';
 
-  // Build the filter chips from data so the list and chips stay in sync
+  // Guard against a remembered filter/sort that no longer exists in data
+  if (['All'].concat(PROJECT_FILTERS).indexOf(state.filter) === -1) {
+    setState({ filter: 'All' });
+  }
+  if (!PROJECT_SORTS.some(function (s) { return s.id === state.sort; })) {
+    setState({ sort: 'course' });
+  }
+
   ['All'].concat(PROJECT_FILTERS).forEach(function (name) {
     var chip = document.createElement('button');
     chip.type = 'button';
-    chip.className = 'chip' + (name === 'All' ? ' is-active' : '');
+    chip.className = 'chip';
     chip.textContent = name;
     chip.dataset.filter = name;
-    chip.setAttribute('aria-pressed', String(name === 'All'));
     filterBar.appendChild(chip);
   });
 
-  function escapeHtml(text) {
-    return String(text)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+  PROJECT_SORTS.forEach(function (sort) {
+    var option = document.createElement('option');
+    option.value = sort.id;
+    option.textContent = sort.label;
+    sortSelect.appendChild(option);
+  });
+
+  function syncControls() {
+    Array.prototype.forEach.call(filterBar.children, function (chip) {
+      var active = chip.dataset.filter === state.filter;
+      chip.classList.toggle('is-active', active);
+      chip.setAttribute('aria-pressed', String(active));
+    });
+    sortSelect.value = state.sort;
   }
 
   function projectTemplate(project) {
@@ -163,33 +185,36 @@
     );
   }
 
-  function matches(project) {
-    var passesFilter = activeFilter === 'All' || project.tags.indexOf(activeFilter) !== -1;
-    if (!passesFilter) {
-      return false;
-    }
-    if (!query) {
-      return true;
-    }
-    var haystack = [project.title, project.summary, project.kind]
-      .concat(project.tags)
-      .join(' ')
-      .toLowerCase();
-    return haystack.indexOf(query) !== -1;
+  function visibleProjects() {
+    var sort = PROJECT_SORTS.filter(function (s) { return s.id === state.sort; })[0];
+
+    return PROJECTS
+      .filter(function (project) {
+        // Step 1: chip filter
+        if (state.filter !== 'All' && project.tags.indexOf(state.filter) === -1) {
+          return false;
+        }
+        // Step 2: free-text search across the visible fields
+        if (!query) {
+          return true;
+        }
+        var haystack = [project.title, project.summary, project.kind].concat(project.tags).join(' ').toLowerCase();
+        return haystack.indexOf(query) !== -1;
+      })
+      .slice() // copy before sorting so PROJECTS itself keeps course order
+      .sort(sort.compare); // Step 3: order the survivors
   }
 
   function renderProjects() {
-    var visible = PROJECTS.filter(matches);
-
+    var visible = visibleProjects();
     projectList.innerHTML = visible.map(projectTemplate).join('');
 
-    // Feedback: how many are showing, and an empty state when none match
-    var hasQueryOrFilter = query || activeFilter !== 'All';
+    var narrowed = query || state.filter !== 'All';
     emptyState.hidden = visible.length !== 0;
-    resultCount.textContent = hasQueryOrFilter
+    clearButton.hidden = !narrowed;
+    resultCount.textContent = narrowed
       ? 'Showing ' + visible.length + ' of ' + PROJECTS.length
       : PROJECTS.length + ' pieces of work';
-    clearButton.hidden = !hasQueryOrFilter;
 
     // Stagger the entrance so the change is easy to follow
     Array.prototype.forEach.call(projectList.children, function (item, index) {
@@ -199,15 +224,15 @@
 
   filterBar.addEventListener('click', function (event) {
     var chip = event.target.closest('.chip');
-    if (!chip) {
-      return;
+    if (chip) {
+      setState({ filter: chip.dataset.filter });
+      syncControls();
+      renderProjects();
     }
-    activeFilter = chip.dataset.filter;
-    Array.prototype.forEach.call(filterBar.children, function (c) {
-      var active = c === chip;
-      c.classList.toggle('is-active', active);
-      c.setAttribute('aria-pressed', String(active));
-    });
+  });
+
+  sortSelect.addEventListener('change', function () {
+    setState({ sort: sortSelect.value });
     renderProjects();
   });
 
@@ -217,14 +242,10 @@
   });
 
   function resetProjectControls() {
-    activeFilter = 'All';
     query = '';
     searchInput.value = '';
-    Array.prototype.forEach.call(filterBar.children, function (c) {
-      var active = c.dataset.filter === 'All';
-      c.classList.toggle('is-active', active);
-      c.setAttribute('aria-pressed', String(active));
-    });
+    setState({ filter: 'All' });
+    syncControls();
     renderProjects();
   }
 
@@ -277,6 +298,7 @@
     }
   });
 
+  syncControls();
   renderProjects();
 
   /* ------------------------------------------------------------------
@@ -468,7 +490,7 @@
      / next (buttons and the arrow keys), a click outside the picture to
      close, and returning focus to the cover that opened the viewer.
      The covers are read from the page each time it opens, so previous /
-     next follow whatever the filter and the search are currently showing.
+     next follow whatever the filter, sort and search are showing.
      ------------------------------------------------------------------ */
   var lightbox = document.getElementById('lightbox');
   var lightboxImage = document.getElementById('lightbox-image');
