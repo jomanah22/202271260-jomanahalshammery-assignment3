@@ -1,12 +1,11 @@
 /* ==========================================================================
-   Jomanah Alshammary — portfolio scripts (Assignment 2)
-   1. Theme toggle (saved in localStorage)
-   2. Mobile navigation
-   3. Projects: render from data, filter chips, live search, notes popup
-   4. Contact form: validation, saved draft, animated confirmation
-   5. Scroll reveal
-   6. Footer year
-   7. Project image viewer (lightbox)
+   Jomanah Alshammary — portfolio scripts (Assignment 3)
+   1. State (remembered in localStorage)
+   2. Theme toggle
+   3. Mobile navigation
+   8. Scroll reveal
+   9. Footer year
+   10. Project image viewer (lightbox)
    ========================================================================== */
 
 (function () {
@@ -15,7 +14,38 @@
   var root = document.documentElement;
 
   /* ------------------------------------------------------------------
-     1. Theme toggle
+     1. State
+     Everything the page remembers between visits lives in one object
+     and one localStorage key. Reading and writing go through these two
+     helpers so the rest of the code never touches storage directly.
+     (The theme keeps its own key because the inline <head> script reads
+     it before this file loads; the form draft has its own key too.)
+     ------------------------------------------------------------------ */
+  var STATE_KEY = 'portfolio-state';
+  var defaults = { filter: 'All', sort: 'course', logOpen: false };
+  var state = loadState();
+
+  function loadState() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(STATE_KEY) || '{}');
+      return Object.assign({}, defaults, saved);
+    } catch (error) {
+      return Object.assign({}, defaults);
+    }
+  }
+
+  function setState(patch) {
+    Object.assign(state, patch);
+    try {
+      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    } catch (error) {
+      /* Storage can be unavailable (private mode, quota). The page still
+         works; it just won't remember choices. */
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     2. Theme toggle
      ------------------------------------------------------------------ */
   var themeToggle = document.getElementById('theme-toggle');
 
@@ -46,7 +76,7 @@
   );
 
   /* ------------------------------------------------------------------
-     2. Mobile navigation
+     3. Mobile navigation
      ------------------------------------------------------------------ */
   var menuToggle = document.getElementById('menu-toggle');
   var nav = document.getElementById('site-nav');
@@ -371,9 +401,7 @@
   });
 
   /* ------------------------------------------------------------------
-     5. Scroll reveal
-     Elements with .reveal fade up the first time they enter the viewport.
-     If IntersectionObserver isn't available everything is simply shown.
+     8. Scroll reveal
      ------------------------------------------------------------------ */
   var revealItems = document.querySelectorAll('.reveal');
 
@@ -409,7 +437,7 @@
   }
 
   /* ------------------------------------------------------------------
-     6. Footer year
+     9. Footer year
      ------------------------------------------------------------------ */
   /* ------------------------------------------------------------------
      Typing effect for the hero title
@@ -433,7 +461,7 @@
   document.getElementById('year').textContent = new Date().getFullYear();
 
   /* ------------------------------------------------------------------
-     7. Project image viewer
+     10. Project image viewer
      Each project cover is a button. Clicking it shows that picture full
      size in a native <dialog>: showModal() gives the backdrop, the focus
      trap and Escape to close. On top of that we add the caption, previous
