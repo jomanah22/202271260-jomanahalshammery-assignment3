@@ -256,8 +256,23 @@
             </div>
           </div>
           <div class="form-group field">
+            <label for="topic">What is this about?</label>
+            <span class="select-wrap select-wrap-block">
+              <select id="topic" name="topic" required aria-describedby="topic-error">
+                <option value="">Choose a topic...</option>
+                <option value="collaboration">A collaboration</option>
+                <option value="internship">An internship or work</option>
+                <option value="feedback">Feedback on my work</option>
+                <option value="other">Something else</option>
+              </select>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+            <p class="field-error" id="topic-error"></p>
+          </div>
+          <div class="form-group field">
             <label for="message">Message</label>
-            <textarea id="message" name="message" rows="4" required aria-describedby="message-error"></textarea>
+            <textarea id="message" name="message" rows="4" required aria-describedby="message-hint message-error"></textarea>
+            <p class="field-hint" id="message-hint"></p>
             <p class="field-error" id="message-error"></p>
           </div>
           <div class="form-footer">

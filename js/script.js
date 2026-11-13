@@ -4,6 +4,7 @@
    2. Theme toggle
    3. Mobile navigation
    4. Projects: filter + sort + search, notes popup
+   7. Contact form: topic-aware, multi-step validation, saved draft
    8. Scroll reveal
    9. Footer year
    10. Project image viewer (lightbox)
@@ -302,16 +303,43 @@
   renderProjects();
 
   /* ------------------------------------------------------------------
-     4. Contact form
-     - validates each field and shows the problem next to it
-     - keeps a draft in localStorage so a refresh doesn't lose the text
-     - shows an animated confirmation on success
+     7. Contact form
+     Step 1: every field has a value.  Step 2: values have the right
+     shape (email format, message length).  Only when both steps pass is
+     the message accepted. The topic changes the hint under the message
+     box and the confirmation text. A draft is kept in localStorage.
      ------------------------------------------------------------------ */
   var form = document.getElementById('contact-form');
   var status = document.getElementById('form-status');
   var draftNote = document.getElementById('form-draft');
+  var messageHint = document.getElementById('message-hint');
   var DRAFT_KEY = 'contact-draft';
-  var fields = ['name', 'email', 'message'];
+  var fields = ['name', 'email', 'topic', 'message'];
+
+  var TOPICS = {
+    collaboration: {
+      hint: 'Tell me a little about the project and what kind of help you’re after.',
+      reply: 'I’d love to hear more about the collaboration.'
+    },
+    internship: {
+      hint: 'A sentence about the role and the timeframe is plenty to start.',
+      reply: 'I’ll get back to you about the opportunity.'
+    },
+    feedback: {
+      hint: 'Mention which piece of work you’re responding to.',
+      reply: 'Thank you for taking the time to share feedback.'
+    },
+    other: {
+      hint: 'Anything goes.',
+      reply: 'I’ll reply as soon as I can.'
+    }
+  };
+
+  function updateTopicHint() {
+    var topic = TOPICS[form.elements.topic.value];
+    messageHint.textContent = topic ? topic.hint : 'Pick a topic above and I’ll suggest what to include.';
+  }
+  form.elements.topic.addEventListener('change', updateTopicHint);
 
   function setFieldError(name, message) {
     var input = form.elements[name];
@@ -321,14 +349,22 @@
     error.textContent = message;
   }
 
+  var REQUIRED_MESSAGES = {
+    name: 'Please tell me your name.',
+    email: 'Please add your email so I can reply.',
+    topic: 'Please choose what this is about.',
+    message: 'Please write a short message.'
+  };
+
   function validateField(name) {
     var value = form.elements[name].value.trim();
 
+    // Step 1: presence
     if (!value) {
-      var labels = { name: 'Please tell me your name.', email: 'Please add your email so I can reply.', message: 'Please write a short message.' };
-      setFieldError(name, labels[name]);
+      setFieldError(name, REQUIRED_MESSAGES[name]);
       return false;
     }
+    // Step 2: shape
     if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       setFieldError(name, 'That doesn’t look like a complete email address.');
       return false;
@@ -394,6 +430,7 @@
   });
 
   restoreDraft();
+  updateTopicHint();
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -409,9 +446,9 @@
     }
 
     var name = form.elements.name.value.trim();
-    var email = form.elements.email.value.trim();
+    var topic = TOPICS[form.elements.topic.value];
 
-    status.textContent = 'Thanks, ' + name + '. Your message has been noted — I’ll reply to ' + email + ' soon.';
+    status.textContent = 'Thanks, ' + name + '. ' + topic.reply + ' Your message has been noted.';
     status.classList.add('is-success', 'is-shown');
 
     form.reset();
@@ -420,6 +457,7 @@
     });
     localStorage.removeItem(DRAFT_KEY);
     draftNote.textContent = '';
+    updateTopicHint();
   });
 
   /* ------------------------------------------------------------------
