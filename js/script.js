@@ -4,6 +4,7 @@
    2. Theme toggle
    3. Mobile navigation
    4. Projects: filter + sort + search, notes popup
+   6. Live weather and local time (Open-Meteo)
    7. Contact form: topic-aware, multi-step validation, saved draft
    8. Scroll reveal
    9. Footer year
@@ -44,6 +45,38 @@
       /* Storage can be unavailable (private mode, quota). The page still
          works; it just won't remember choices. */
     }
+  }
+
+  /* Small cache for API responses so a reload doesn't refetch immediately */
+  function cacheGet(key) {
+    try {
+      var entry = JSON.parse(sessionStorage.getItem(key) || 'null');
+      if (entry && Date.now() - entry.time < CONFIG.cacheMinutes * 60 * 1000) {
+        return entry.data;
+      }
+    } catch (error) { /* ignore */ }
+    return null;
+  }
+
+  function cacheSet(key, data) {
+    try {
+      sessionStorage.setItem(key, JSON.stringify({ time: Date.now(), data: data }));
+    } catch (error) { /* ignore */ }
+  }
+
+  /* fetch() with a timeout so a hanging request can't leave "Loading…"
+     on screen forever */
+  function fetchJson(url, timeoutMs) {
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, timeoutMs || 8000);
+    return fetch(url, { signal: controller.signal })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status);
+        }
+        return response.json();
+      })
+      .finally(function () { clearTimeout(timer); });
   }
 
   function escapeHtml(text) {
@@ -301,6 +334,75 @@
 
   syncControls();
   renderProjects();
+
+  /* ------------------------------------------------------------------
+     6. Live weather and local time
+     One line in the Contact section: "It's 3:15 PM in Khobar, 38° and
+     clear." The clock ticks every minute; the weather comes from
+     Open-Meteo and is cached for a few minutes.
+     ------------------------------------------------------------------ */
+  var nowLine = document.getElementById('now-line');
+  var loc = CONFIG.location;
+
+  // WMO weather interpretation codes → short descriptions
+  function describeWeather(code, isDay) {
+    if (code === 0) { return isDay ? 'clear skies' : 'a clear night'; }
+    if (code === 1) { return 'mostly clear'; }
+    if (code === 2) { return 'partly cloudy'; }
+    if (code === 3) { return 'overcast'; }
+    if (code === 45 || code === 48) { return 'foggy'; }
+    if (code >= 51 && code <= 57) { return 'drizzle'; }
+    if (code >= 61 && code <= 67) { return 'rain'; }
+    if (code >= 71 && code <= 77) { return 'snow'; }
+    if (code >= 80 && code <= 82) { return 'showers'; }
+    if (code >= 95) { return 'thunderstorms'; }
+    return 'changeable weather';
+  }
+
+  function localTime() {
+    return new Intl.DateTimeFormat('en', { hour: 'numeric', minute: '2-digit', timeZone: loc.timezone }).format(new Date());
+  }
+
+  var weatherText = null; // null = not loaded yet, '' = failed
+
+  function renderNow() {
+    var text = 'It’s ' + localTime() + ' in ' + loc.name;
+    if (weatherText === null) {
+      text += ' — checking the weather…';
+    } else if (weatherText) {
+      text += ', ' + weatherText + '.';
+    } else {
+      text += '. (Weather is unavailable right now.)';
+    }
+    nowLine.textContent = text;
+  }
+
+  function loadWeather() {
+    var cached = cacheGet('weather');
+    if (cached) {
+      weatherText = cached;
+      renderNow();
+      return;
+    }
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + loc.latitude + '&longitude=' + loc.longitude +
+      '&current=temperature_2m,weather_code,is_day&timezone=' + encodeURIComponent(loc.timezone);
+
+    fetchJson(url)
+      .then(function (data) {
+        var c = data.current;
+        weatherText = Math.round(c.temperature_2m) + '° and ' + describeWeather(c.weather_code, c.is_day === 1);
+        cacheSet('weather', weatherText);
+      })
+      .catch(function () {
+        weatherText = '';
+      })
+      .then(renderNow);
+  }
+
+  renderNow();
+  loadWeather();
+  setInterval(renderNow, 60 * 1000);
+
 
   /* ------------------------------------------------------------------
      7. Contact form

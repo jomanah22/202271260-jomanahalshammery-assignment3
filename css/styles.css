@@ -1260,6 +1260,15 @@ h3 {
   background-color: transparent;
 }
 
+/* Live time + weather line */
+.now-line {
+  margin: -1.5rem auto 2.5rem;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-muted);
+  min-height: 1.6em;
+}
+
 @media (max-width: 768px) {
   .project-toolbar {
     gap: 0.9rem;
