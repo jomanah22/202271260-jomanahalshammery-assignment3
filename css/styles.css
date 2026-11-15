@@ -1260,6 +1260,114 @@ h3 {
   background-color: transparent;
 }
 
+/* Practice log */
+/* The heading is centred like every other section, with the toggle under it */
+.log-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.log-header .section-title {
+  margin-bottom: 1.75rem;
+}
+
+.log-list {
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  animation: rise 0.4s var(--ease) both;
+}
+
+.log-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.log-item summary {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto 14px;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  cursor: pointer;
+  list-style: none;
+  transition: color 0.2s var(--ease);
+}
+
+.log-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.log-item summary:hover {
+  color: var(--accent);
+}
+
+.log-item summary svg {
+  color: var(--text-muted);
+  transition: transform 0.25s var(--ease);
+}
+
+.log-item[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.log-index {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.log-title {
+  font-weight: 500;
+}
+
+.log-tools {
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.log-body {
+  padding: 0 0 1.75rem 3.5rem;
+  max-width: 68ch;
+  animation: rise 0.3s var(--ease) both;
+}
+
+.log-body p + p {
+  margin-top: 0.75rem;
+}
+
+.log-learning {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.log-learning strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.log-gallery {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  max-width: 720px;
+}
+
+.log-gallery-2,
+.log-gallery-3 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.log-gallery img {
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background-color: var(--surface-2);
+}
+
 /* Live time + weather line */
 .now-line {
   margin: -1.5rem auto 2.5rem;
@@ -1286,6 +1394,20 @@ h3 {
 
   .project-search {
     flex: 1 1 auto;
+  }
+
+  .log-item summary {
+    grid-template-columns: 2rem 1fr 14px;
+  }
+
+  .log-tools {
+    grid-column: 2;
+    grid-row: 2;
+    white-space: normal;
+  }
+
+  .log-body {
+    padding-left: 0;
   }
 }
 

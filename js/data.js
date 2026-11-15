@@ -1,7 +1,7 @@
 /* ==========================================================================
    Portfolio content (Assignment 2)
    Everything here comes from my ITD 211 Digital Visualization design journal
-   (term 251): the three projects, three selected assignments.
+   (term 251): the three projects, three selected assignments and six selected in-class exercises.
    The objectives, process notes and reflections are the journal's own text.
    `kind` is "Project" or "Assignment"; `sequence` is the journal order.
    ========================================================================== */
@@ -99,5 +99,57 @@ var PROJECT_SORTS = [
       }
       return a.sequence - b.sequence;
     }
+  }
+];
+
+/* In-class exercises from the journal, in order. */
+var EXERCISES = [
+  {
+    title: '1.1 Mood Board Design',
+    tools: ['Photoshop'],
+    objective: 'Develop skills in text masking, photomontage and creative visual storytelling.',
+    brief: 'The exercise was to use Photoshop to turn simple photos into imaginative visuals by creating a galaxy text for the word INFINITY and a playful scene where balloons lift the Burger King building. First I used a galaxy image as a clipping mask inside the text so the letters looked like deep space. Then I built a second scene by adding balloons and a zipper on top of the building and placing them in the empty sky area to push the level of creativity.',
+    learning: 'This activity improved my control of layers, masks, selection and transformation tools in Photoshop. I learned to think beyond realistic scenes and to use digital tools to express abstract ideas in a clear and engaging way.',
+    images: ['assets/images/exercise-1-1-1.jpg', 'assets/images/exercise-1-1-2.jpg']
+  },
+  {
+    title: '1.2 Post Card',
+    tools: ['Illustrator'],
+    objective: 'Develop skills in visual branding, layout and creative concept building using Illustrator as a tool.',
+    brief: 'In this exercise I designed a postcard using Illustrator. My idea targeted a seafood restaurant in Alkhobar, so I combined the word fish in Arabic (سمك) with the city name Alkhobar (الخبر) to create the brand name Samakji. I used a blue theme to express the sea and support the identity of a coastal restaurant. I started by experimenting with suitable typography for the new brand name, then arranged visual elements such as the octopus, waves and fish to create a strong marine atmosphere. I added simple outlined frames around the text to make the layout clear and balanced, and I organized the composition by distributing shapes and empty space to achieve a clean and appealing visual result.',
+    learning: 'I learned how to build a visual identity from a simple linguistic idea and how to use color and marine elements to represent the concept of a seafood brand. I improved my skills in Illustrator, especially in layering, color control and creating a complete coherent design that clearly delivers the message.',
+    images: ['assets/images/exercise-1-2-1.jpg', 'assets/images/exercise-1-2-2.jpg', 'assets/images/exercise-1-2-3.jpg']
+  },
+  {
+    title: '1.3 Illustrator Logo',
+    tools: ['Illustrator'],
+    objective: 'Develop skills in constructing new logos using limited shapes and controlled design systems.',
+    brief: 'In this exercise I used Illustrator to redesign a company logo by creating a new mark using only the shapes and visual language found in the original logo. The challenge was to build a fresh identity while staying fully restricted to the same geometric style and overall structure. I began by analyzing the original logo to understand its shapes, proportions and angles, then I recreated the basic forms in Illustrator and experimented with new arrangements to produce a different layout while keeping the same visual system. I adjusted stroke weight, alignment and rotation to achieve a balanced and strong design that still feels connected to the first logo.',
+    learning: 'This exercise helped me understand how limitation can push creativity and how brand identity can be rebuilt through consistent geometry. I improved my ability to design within strict rules and to make clear, thoughtful design decisions using Illustrator tools and precise shape manipulation.',
+    images: ['assets/images/exercise-1-3-1.jpg', 'assets/images/exercise-1-3-2.jpg', 'assets/images/exercise-1-3-3.jpg', 'assets/images/exercise-1-3-4.jpg']
+  },
+  {
+    title: '1.10 Blender Modifiers',
+    tools: ['Blender'],
+    objective: 'Learn how to use modifiers to create smoother and more detailed 3D objects.',
+    brief: 'I learned how to model a Saudi coffee dallah using modifiers like Subdivision Surface to smooth the shape and define its details. I also created maamoul, cups, and a serving tray to complete the scene, then added an HDRI background to place the set in a realistic environment. I modeled each part separately in Edit Mode, applied modifiers for smoothness, and arranged the objects together. After that, I set up the lighting and HDRI to prepare the final scene.',
+    learning: 'I understand how modifiers enhance modeling and how combining multiple objects creates a complete 3D composition. This helped me gain more control and confidence in shaping complex models.',
+    images: ['assets/images/exercise-1-10-1.jpg', 'assets/images/exercise-1-10-2.jpg']
+  },
+  {
+    title: '1.13 Blender Nodes',
+    tools: ['Blender'],
+    objective: 'Learn how to build different textures for materials using shader nodes.',
+    brief: 'In this exercise I created several spheres and gave each one a unique material using nodes. I experimented with patterns, metal, glass and plastic to see how textures change the look of the surface. I opened the shader editor and added texture nodes such as noise, checker and wave, then connected them to color and roughness to control the effect. I adjusted values until each sphere showed a clear and different texture.',
+    learning: 'I learned how shader nodes control textures and how small changes in the node values create very different materials. This helped me understand how to design custom surfaces for future projects.',
+    images: ['assets/images/exercise-1-13-1.jpg', 'assets/images/exercise-1-13-2.jpg']
+  },
+  {
+    title: '1.14 Sculpting',
+    tools: ['Blender'],
+    objective: 'Learn basic sculpting tools and use them to create a stylized face.',
+    brief: 'In this exercise I used sculpting mode to shape a head and practice building eyes, nose, mouth and ears for a simple character. I started from a basic mesh, then used grab, inflate and smooth brushes to form the main head shape and facial features and adjusted the lights to show the forms clearly.',
+    learning: 'I learned how sculpting tools control volume and details and how I can push and smooth the mesh to create expressive faces.',
+    images: ['assets/images/exercise-1-14-1.jpg']
   }
 ];

@@ -4,6 +4,7 @@
    2. Theme toggle
    3. Mobile navigation
    4. Projects: filter + sort + search, notes popup
+   5. In-class exercises: show/hide section
    6. Live weather and local time (Open-Meteo)
    7. Contact form: topic-aware, multi-step validation, saved draft
    8. Scroll reveal
@@ -334,6 +335,51 @@
 
   syncControls();
   renderProjects();
+
+  /* ------------------------------------------------------------------
+     5. Practice log
+     In-class exercises rendered from EXERCISES. The whole list can
+     be shown or hidden and the choice is remembered. Each entry is a
+     native <details> element, which gives keyboard support for free.
+     ------------------------------------------------------------------ */
+  var logToggle = document.getElementById('log-toggle');
+  var logList = document.getElementById('log-list');
+
+  logList.innerHTML = EXERCISES.map(function (exercise, index) {
+    var images = exercise.images.map(function (src) {
+      return '<img src="' + src + '" alt="" width="1200" height="800" loading="lazy" decoding="async">';
+    }).join('');
+    return (
+      '<details class="log-item">' +
+        '<summary>' +
+          '<span class="log-index">' + String(index + 1).padStart(2, '0') + '</span>' +
+          '<span class="log-title">' + escapeHtml(exercise.title) + '</span>' +
+          '<span class="log-tools">' + exercise.tools.map(escapeHtml).join(' · ') + '</span>' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>' +
+        '</summary>' +
+        '<div class="log-body">' +
+          '<p class="log-objective"><strong>Objective:</strong> ' + escapeHtml(exercise.objective) + '</p>' +
+          '<p>' + escapeHtml(exercise.brief) + '</p>' +
+          '<p class="log-learning"><strong>Took away:</strong> ' + escapeHtml(exercise.learning) + '</p>' +
+          (images ? '<div class="log-gallery log-gallery-' + exercise.images.length + '">' + images + '</div>' : '') +
+        '</div>' +
+      '</details>'
+    );
+  }).join('');
+
+  function renderLog() {
+    logList.hidden = !state.logOpen;
+    logToggle.setAttribute('aria-expanded', String(state.logOpen));
+    logToggle.querySelector('span').textContent = state.logOpen
+      ? 'Hide the practice log'
+      : 'Show all ' + EXERCISES.length + ' exercises';
+  }
+
+  logToggle.addEventListener('click', function () {
+    setState({ logOpen: !state.logOpen });
+    renderLog();
+  });
+  renderLog();
 
   /* ------------------------------------------------------------------
      6. Live weather and local time
