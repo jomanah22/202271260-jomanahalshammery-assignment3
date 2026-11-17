@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Jomanah Alshammary - Portfolio Styles (Assignment 2)
+   Jomanah Alshammary - Portfolio Styles (Assignment 3)
    1. Variables (light + dark theme)
    2. Base & typography
    3. Buttons, cards, badges, tags
@@ -205,6 +205,7 @@ h3 {
 .section-title p {
   color: var(--text-muted);
 }
+
 
 /* 3. Buttons, cards, badges, tags --------------------------------------- */
 .btn {

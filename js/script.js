@@ -104,20 +104,13 @@
   function applyTheme(theme) {
     root.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
-    themeToggle.setAttribute(
-      'aria-label',
-      theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
-    );
+    themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
   }
 
   themeToggle.addEventListener('click', function () {
     applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
   });
-
-  themeToggle.setAttribute(
-    'aria-label',
-    currentTheme() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
-  );
+  themeToggle.setAttribute('aria-label', currentTheme() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
 
   /* ------------------------------------------------------------------
      3. Mobile navigation
@@ -134,13 +127,11 @@
   menuToggle.addEventListener('click', function () {
     setMenu(!nav.classList.contains('is-open'));
   });
-
   nav.addEventListener('click', function (event) {
     if (event.target.tagName === 'A') {
       setMenu(false);
     }
   });
-
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape' && nav.classList.contains('is-open')) {
       setMenu(false);
@@ -197,14 +188,11 @@
   }
 
   function projectTemplate(project) {
-    var tags = project.tags.map(function (tag) {
-      return '<li>' + escapeHtml(tag) + '</li>';
-    }).join('');
-
+    var tags = project.tags.map(function (tag) { return '<li>' + escapeHtml(tag) + '</li>'; }).join('');
     return (
       '<article class="card project-card" data-id="' + project.id + '">' +
         '<button type="button" class="project-media" aria-label="View ' + escapeHtml(project.title) + ' full size">' +
-          '<img src="' + project.image + '" alt="" width="1200" height="750" loading="lazy">' +
+          '<img src="' + project.image + '" alt="" width="1200" height="750" loading="lazy" decoding="async">' +
         '</button>' +
         '<div class="project-body">' +
           '<span class="badge' + (project.kind === 'Project' ? ' badge-accent' : '') + '">' + escapeHtml(project.kind) + '</span>' +
@@ -251,7 +239,6 @@
       ? 'Showing ' + visible.length + ' of ' + PROJECTS.length
       : PROJECTS.length + ' pieces of work';
 
-    // Stagger the entrance so the change is easy to follow
     Array.prototype.forEach.call(projectList.children, function (item, index) {
       item.style.animationDelay = (index * 60) + 'ms';
     });
@@ -283,11 +270,9 @@
     syncControls();
     renderProjects();
   }
-
   clearButton.addEventListener('click', resetProjectControls);
   document.getElementById('project-empty-reset').addEventListener('click', resetProjectControls);
 
-  // Expand / collapse (event delegation, so it survives re-rendering)
   /* "Process & notes" opens a popup with the full write-up for that card.
      showModal() supplies the backdrop, focus trap and Escape; we add the
      content, a click-outside close and focus return. */
@@ -525,7 +510,6 @@
     return true;
   }
 
-  // Validate a field as soon as the visitor leaves it
   fields.forEach(function (name) {
     form.elements[name].addEventListener('blur', function () {
       if (form.elements[name].value.trim()) {
@@ -534,15 +518,10 @@
     });
   });
 
-  // Draft handling
   function saveDraft() {
     var draft = {};
-    fields.forEach(function (name) {
-      draft[name] = form.elements[name].value;
-    });
-    var hasContent = fields.some(function (name) {
-      return draft[name].trim();
-    });
+    fields.forEach(function (name) { draft[name] = form.elements[name].value; });
+    var hasContent = fields.some(function (name) { return draft[name].trim(); });
     try {
       if (hasContent) {
         localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
@@ -562,9 +541,7 @@
       if (!saved) {
         return;
       }
-      fields.forEach(function (name) {
-        form.elements[name].value = saved[name] || '';
-      });
+      fields.forEach(function (name) { form.elements[name].value = saved[name] || ''; });
       draftNote.textContent = 'Restored your unsent draft.';
     } catch (error) {
       localStorage.removeItem(DRAFT_KEY);
@@ -600,9 +577,7 @@
     status.classList.add('is-success', 'is-shown');
 
     form.reset();
-    fields.forEach(function (field) {
-      setFieldError(field, '');
-    });
+    fields.forEach(function (field) { setFieldError(field, ''); });
     localStorage.removeItem(DRAFT_KEY);
     draftNote.textContent = '';
     updateTopicHint();
@@ -616,18 +591,13 @@
   if ('IntersectionObserver' in window) {
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        // Also show anything already scrolled past (e.g. after a reload
-        // that restores the scroll position), otherwise it would stay hidden
         if (entry.isIntersecting || entry.boundingClientRect.bottom < 0) {
           entry.target.classList.add('is-visible');
           observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.12 });
-
-    revealItems.forEach(function (item) {
-      observer.observe(item);
-    });
+    revealItems.forEach(function (item) { observer.observe(item); });
 
     // Safety net for jumps (anchor links, restored scroll position): anything
     // already above the fold is shown without waiting for the observer
@@ -639,9 +609,7 @@
       });
     }, { passive: true });
   } else {
-    revealItems.forEach(function (item) {
-      item.classList.add('is-visible');
-    });
+    revealItems.forEach(function (item) { item.classList.add('is-visible'); });
   }
 
   /* ------------------------------------------------------------------
