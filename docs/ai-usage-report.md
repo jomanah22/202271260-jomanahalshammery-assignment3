@@ -1,4 +1,4 @@
-# AI Usage Report – Assignment 2
+# AI Usage Report – Assignment 3
 
 ## Signed Declaration
 
@@ -10,164 +10,112 @@
 - **Student Name:** Jomanah Alshammary
 - **Student ID:** 202271260
 - **Course:** SWE 363 – Web Engineering
-- **Repository Link:** [https://github.com/jomanah22/202271260-jomanahalshammery-assignment2](https://github.com/jomanah22/202271260-jomanahalshammery-assignment2)
+- **Repository Link:** [https://github.com/jomanah22/202271260-jomanahalshammery-assignment3](https://github.com/jomanah22/202271260-jomanahalshammery-assignment3)
 
 ## 1. High-Level AI Usage Log
 
-| Tool                  | Date       | Purpose                                                  | Files Affected                                 | What You Changed                                                                                                                                                   |
-|:--------------------- |:---------- |:-------------------------------------------------------- |:---------------------------------------------- |:------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Claude 3.5 Sonnet** | 2026-09-14 | Project data array and schema design                     | `js/data.js`                                   | Extracted into a standalone `data.js` file, adapted schema to fit coursework from ITD 211 & ITD 212, added tags, process, and learning reflection fields.          |
-| **Claude 3.5 Sonnet** | 2026-09-15 | Dynamic project card rendering & filter/search logic     | `js/script.js`, `css/styles.css`               | Unified independent filter and search state into a single `matches(project)` predicate function; removed unwanted sort controls; added HTML escaping for security. |
-| **Claude 3.5 Sonnet** | 2026-09-16 | Accessible `<dialog>` popup for project notes            | `index.html`, `js/script.js`, `css/styles.css` | Implemented native HTML5 `<dialog>` using `showModal()`; added backdrop-click dismiss, body scroll lock, and return of focus to opening button.                    |
-| **Claude 3.5 Sonnet** | 2026-09-18 | Contact form validation, live status, and draft autosave | `index.html`, `js/script.js`, `css/styles.css` | Replaced vague error messages with specific guidance, added ARIA attributes (`aria-invalid`, `aria-describedby`), and added debounced `localStorage` draft saving. |
-| **Claude 3.5 Sonnet** | 2026-09-19 | Scroll reveal animations with IntersectionObserver       | `js/script.js`, `css/styles.css`               | Added `prefers-reduced-motion` support, safety scroll listener for midway reloads, and subtle staggered fade-in delays.                                            |
-| **Claude 3.5 Sonnet** | 2026-09-20 | Scoped lightbox image viewer to active filtered projects | `js/script.js`                                 | Scoped `.project-media` querySelector to `#project-list` so keyboard navigation only cycles through currently visible projects.                                    |
+| Tool       | Date       | Purpose                                                     | Files Affected                                               | What You Changed                                                                                                                                                                 |
+|:---------- |:---------- |:----------------------------------------------------------- |:------------------------------------------------------------ |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Claude** | 2026-11-10 | Script loading order and a separate configuration file      | `index.html`, `js/config.js`                                 | Moved the script tags into the head with `defer` in the order config → data → script; wrote the `CONFIG` values (Khobar coordinates, `Asia/Riyadh`, ten-minute cache) myself.    |
+| **Claude** | 2026-11-11 | One saved state object instead of separate variables        | `js/script.js`                                               | Adopted `loadState()` / `setState()` with a single `localStorage` key; kept the theme and the form draft under their own keys; wrapped storage access in `try / catch`.          |
+| **Claude** | 2026-11-12 | Sort orders as data and the filter → search → sort pipeline | `js/data.js`, `js/script.js`, `index.html`, `css/styles.css` | Added `sequence` and `PROJECT_SORTS` with comparators; wrote `visibleProjects()` with `slice()` before `sort()`; chose not to persist the search text; styled the native select. |
+| **Claude** | 2026-11-13 | Topic-aware contact form and two-step validation            | `index.html`, `js/script.js`, `css/styles.css`               | Added the `TOPICS` map and `REQUIRED_MESSAGES`; wrote every hint, reply and error message in my own words; linked the hint to the textarea with `aria-describedby`.              |
+| **Claude** | 2026-11-14 | Live weather and local time from a public API               | `js/script.js`, `index.html`, `css/styles.css`               | Chose Open-Meteo; kept `fetchJson()` with an `AbortController` timeout and a `sessionStorage` cache; wrote `describeWeather()` from the WMO code table; three text states.       |
+| **Claude** | 2026-11-15 | In-class exercises rendered as `<details>` entries          | `js/data.js`, `js/script.js`, `index.html`, `css/styles.css` | Entered the six exercises from my journal; `renderLog()` with `aria-expanded` / `aria-controls`; `logOpen` saved in state; wrote the list and phone styles.                      |
+| **Claude** | 2026-11-17 | Review pass for consistency                                 | `js/script.js`, `css/styles.css`, `js/data.js`, `index.html` | Shortened callbacks to one line, trimmed stale comments, added `decoding="async"`, updated the file headers.                                                                     |
+| **Claude** | 2026-11-18 | Structure of the documentation                              | `docs/ai-usage-report.md`, `docs/technical-documentation.md` | Used the suggested section outline; wrote all reflections and checked every technical claim against the code.                                                                    |
 
 ---
 
 ## 2. Commit-by-Commit AI Assistance Details
 
-Below is the complete audit of each commit for Assignment 2, documenting whether AI assisted, what the AI provided, what human changes were made, and the corresponding evidence file.
+Below is the complete audit of each commit for Assignment 3, documenting whether AI assisted, what the AI provided, what human changes were made, and the corresponding entries in the AI evidence log.
 
-### Commit 1: `commit-1-start-from-assignment-1`
+### Commit 1: `commit-1-start-from-assignment-2`
 
-- **Commit Message:** Start from the Assignment 1 portfolio
-- **Commit Description:** Assignment 1 site copied in unchanged as the starting point
+- **Commit Message:** Start from the Assignment 2 portfolio
+- **Commit Description:** Assignment 2 site copied in unchanged as the starting point
 - **AI Assisted:** No (Manual Implementation)
-- **Details:** Copied Assignment 1 repository files into the Assignment 2 workspace to establish the clean baseline.
+- **Details:** Copied the Assignment 2 repository files into the Assignment 3 workspace to establish the clean baseline.
 
-### Commit 2: `commit-2-refactor-theme-toggle`
+### Commit 2: `commit-2-config-and-deferred-scripts`
 
-- **Commit Message:** Refactor the theme toggle
-- **Commit Description:** Move setting and saving the theme into an applyTheme helper
-- **AI Assisted:** No (Manual Implementation)
-- **Details:** Refactored the inline script and toggle handler into a modular `applyTheme(theme)` helper function to improve maintainability before adding new JavaScript modules.
+- **Commit Message:** Add a configuration file and defer the scripts
+- **Commit Description:** js/config.js with the weather location and cache time; script tags moved into the head with defer
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** Loading the scripts from the `<head>` with `defer` so they run in order after parsing without blocking rendering, and keeping values that are specific to me (location, cache duration) in a separate `CONFIG` object.
+- **What I Changed:** Decided the load order (`config.js`, `data.js`, `script.js`), kept the inline theme script untouched so there is still no flash of the wrong theme, and wrote the configuration values myself with a comment that nothing in the file is secret.
 
-### Commit 3: `commit-3-add-project-data-file`
+### Commit 3: `commit-3-state-module`
 
-- **Commit Message:** Add project data file
-- **Commit Description:** js/data.js with the six projects and the filter list
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** A schema defining an array of objects (`PROJECTS`) with metadata keys (`id`, `title`, `kind`, `year`, `tags`, `image`, `summary`, `process`, `learning`) and a separate list for filter chips (`PROJECT_FILTERS`).
-- **What I Changed:** I wrote all the project data myself using my authentic course projects from ITD 211 and ITD 212. I placed it in its own file (`js/data.js`) to be loaded before `script.js`.
+- **Commit Message:** Add a single saved state object
+- **Commit Description:** loadState and setState helpers and one localStorage key, sections renumbered
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** Replacing the separate variables I had started with (filter, sort, exercises toggle), each writing its own key, by one `state` object read through `loadState()` and written through `setState()` under a single key.
+- **What I Changed:** Kept `theme` as its own key because the inline head script reads it before `script.js` exists, kept `contact-draft` separate because it is cleared on submit, and added the `try / catch` so the page still works when storage is unavailable.
 
-### Commit 4: `commit-4-render-projects-from-data`
+### Commit 4: `commit-4-sort-orders`
 
-- **Commit Message:** Render the projects from data
-- **Commit Description:** Static cards replaced by a rendered list, result count, empty state
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** A card template function (`projectTemplate`) using string interpolation and an `escapeHtml()` helper function to prevent XSS injection.
-- **What I Changed:** Converted template strings into standard ES5 string concatenation to match existing codebase conventions; added the "Process & notes" modal trigger button and custom badge elements.
+- **Commit Message:** Add sort orders on top of filter and search
+- **Commit Description:** sequence and PROJECT_SORTS in the data, sort select with styles, filter → search → sort pipeline, filter and sort remembered
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** Storing each sort option as `{ id, label, compare }` so the `<select>` builds itself, a `visibleProjects()` function that filters, searches and then sorts a copy of the array, and a check that resets a saved filter or sort that no longer exists in the data.
+- **What I Changed:** Added `sequence` to every project so "Journal order" and "Projects first" have something to sort by, wrote `syncControls()` to keep the chips and the select in step with `state`, decided not to remember the search text (an old search on the next visit felt broken in testing), and styled the native select myself, including the `option` colours for dark mode and an accessible name.
 
-### Commit 5: `commit-5-filter-chips`
+### Commit 5: `commit-5-contact-topic-and-validation`
 
-- **Commit Message:** Add filter buttons for projects
-- **Commit Description:** Filter chips built from the data, active state
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Generating button elements dynamically from `['All'].concat(PROJECT_FILTERS)` with `aria-pressed` attributes and attaching an event delegation listener on `#project-filters`.
-- **What I Changed:** Integrated with my CSS chip styling classes (`.chip.is-active`), ensured active toggle logic updates ARIA state correctly for screen readers.
+- **Commit Message:** Add a topic to the contact form with two-step validation
+- **Commit Description:** Topic select, hint under the message, confirmation per topic, presence then shape checks
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** A `TOPICS` map holding a hint and a reply per topic, a `REQUIRED_MESSAGES` object instead of an inline literal, and splitting `validateField()` into a presence step and a shape step.
+- **What I Changed:** Wrote all of the hint, reply and error text in my own words, added `topic` to the draft that is saved and restored, and linked the hint to the textarea with `aria-describedby="message-hint message-error"`.
 
-### Commit 6: `commit-6-live-search`
+### Commit 6: `commit-6-weather-and-local-time`
 
-- **Commit Message:** Add live search
-- **Commit Description:** Search box that narrows the list while typing, combined with the filter
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** A single unified predicate function `matches(project)` evaluating both `activeFilter` and `query` simultaneously across title, summary, kind, and tags.
-- **What I Changed:** AI initially suggested debouncing the search, but since the array contains only 6 items, direct execution on the `input` event was much more responsive and cleaner without added complexity.
+- **Commit Message:** Show live weather and local time from Open-Meteo
+- **Commit Description:** fetch and cache helpers, weather line in the contact section, weather codes mapped to words, loading and failure states
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** After discussing several public APIs, Open-Meteo for a "right now in Khobar" line because it needs no key; `fetchJson()` wrapped in an `AbortController` with an eight-second timer; `cacheGet()` / `cacheSet()` in `sessionStorage` with a timestamp; `Intl.DateTimeFormat` with a time zone instead of hand-written date maths.
+- **What I Changed:** Wrote `describeWeather()` from the WMO weather code table in the Open-Meteo documentation, wrote the three visible states ("checking the weather…", "38° and clear skies", "Weather is unavailable right now"), added the weather credit in the footer, and rejected a generic data-source class because there is exactly one API call.
 
-### Commit 7: `commit-7-clear-filters`
+### Commit 7: `commit-7-in-class-exercises`
 
-- **Commit Message:** Add clear filters
-- **Commit Description:** Clear filters and Show all projects reset the search and the filter
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** A `resetProjectControls()` helper resetting `activeFilter = 'All'`, `query = ''`, clearing the search input value, and re-rendering.
-- **What I Changed:** Tied the function to both the *Clear filters* button and the *Show all projects* button inside the empty state message.
+- **Commit Message:** Add the in-class exercises section
+- **Commit Description:** EXERCISES data and screenshots, practice section rendered as details elements, show and hide remembered in state, phone layout
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** Rendering each exercise as a native `<details>` element so keyboard and screen-reader support comes for free, a toggle button with `aria-expanded` and `aria-controls`, and keeping the open or closed choice in `state.logOpen`.
+- **What I Changed:** Entered the six exercises (objective, brief, what I took from it) from my design journal, resized the screenshots and gave every image explicit sizes with `loading="lazy"`, and wrote the list, gallery and phone styles myself.
 
-### Commit 8: `commit-8-project-notes-popup`
+### Commit 8: `commit-8-tidy-scripts-and-headers`
 
-- **Commit Message:** Add Process and notes popup
-- **Commit Description:** Dialog with the process and learning for each project
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Utilizing the native HTML5 `<dialog id="notes-dialog">` with `showModal()`, detecting backdrop clicks by checking `event.target === dialog`, and listening for the `close` event.
-- **What I Changed:** Added body scroll locking (`body.has-notes`), mapped the student journal reflection text (`process` and `learning`), and guaranteed return of keyboard focus to the opening card button (`openedFrom.focus()`).
+- **Commit Message:** Tidy the scripts and update the file headers
+- **Commit Description:** One-line callbacks, trimmed comments, async image decoding, Assignment 3 headers, REST APIs in the skills card
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** A review pass listing callbacks that could sit on one line, comments that repeated the code, and `decoding="async"` for the lazy images.
+- **What I Changed:** Applied the suggestions that matched the existing style, left the comments that explain a decision, updated the stylesheet and data headers for Assignment 3 and added REST APIs to the skills card.
 
-### Commit 9: `commit-9-update-projects-intro`
-
-- **Commit Message:** Update the projects intro text
-- **Commit Description:** Section intro now describes the filter, search and notes
-- **AI Assisted:** No (Manual Implementation)
-- **Details:** Wrote section introductory copywriting in `index.html` explaining how visitors can interact with the filter chips, search box, and process notes modal.
-
-### Commit 10: `commit-10-contact-form-validation`
-
-- **Commit Message:** Add contact form validation
-- **Commit Description:** Per-field errors, focus to the first problem, submit feedback
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Per-field validation rules (required, email regex, minimum message length) setting `aria-invalid="true"`, toggling `.has-error`, and directing focus to the first invalid field upon submission.
-- **What I Changed:** Replaced generic error text ("Invalid value") with polite, context-aware student guidance ("Please enter your name", "Please enter a valid email address such as name@example.com").
-
-### Commit 11: `commit-11-saved-form-draft`
-
-- **Commit Message:** Save an unsent form draft
-- **Commit Description:** Draft kept in localStorage and restored on reload
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Saving form field values as a JSON string in `localStorage` under key `contact-draft` debounced by 400ms, restoring them on `DOMContentLoaded`, and clearing upon submission.
-- **What I Changed:** Added a defensive `try / catch` block around `localStorage` access so that if cookies/storage are blocked by browser privacy modes, a friendly message is shown without JavaScript runtime errors.
-
-### Commit 12: `commit-12-animated-status-message`
-
-- **Commit Message:** Animate the form status message
-- **Commit Description:** Status fades in instead of appearing at once
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Using an element with `role="status"` and `aria-live="polite"`, transitioning opacity and vertical transform via an `.is-shown` modifier class.
-- **What I Changed:** Styled the success message container with green accent tokens matching the portfolio's color palette.
-
-### Commit 13: `commit-13-scroll-reveal`
-
-- **Commit Message:** Add scroll reveal
-- **Commit Description:** Sections fade up the first time they come into view
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Setting up an `IntersectionObserver` observing all `.reveal` elements to add an `.is-visible` CSS class when they intersect the viewport.
-- **What I Changed:** Added a fallback for browsers without `IntersectionObserver`, added a scroll safety listener for pages restored mid-scroll upon refresh, and respected `prefers-reduced-motion` media queries.
-
-### Commit 14: `commit-14-list-stagger-animation`
-
-- **Commit Message:** Animate the project list
-- **Commit Description:** Cards fade in with a small stagger when the list re-renders
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Appending an inline `style="animation-delay: " + (index * 40) + "ms"` to each rendered project card.
-- **What I Changed:** Adjusted the delay curve and CSS keyframes (`cardFadeIn`) so the stagger feels subtle rather than sluggish.
-
-### Commit 15: `commit-15-lightbox-follows-filter`
-
-- **Commit Message:** Image viewer follows the filtered list
-- **Commit Description:** Previous and next step through what the filter and search are showing
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Changing the lightbox cover query from `document.querySelectorAll('.project-media')` to `projectList.querySelectorAll('.project-media')` when the modal opens.
-- **What I Changed:** Implemented the scoped selector; retained modal defensive checks (`document.body.contains(openedFrom)`) for safe focus restoration upon closing.
-
-### Commit 16: `commit-16-ai-usage-report`
+### Commit 9: `commit-9-ai-usage-report`
 
 - **Commit Message:** Update the AI usage report
-- **Commit Description:** docs/ai-usage-report.md rewritten for Assignment 2
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Outlining the sections required by the assignment guidelines (use cases, benefits, challenges, learning outcomes).
-- **What I Changed:** Wrote all reflections, challenges encountered, and code adaptations in my own words.
+- **Commit Description:** docs/ai-usage-report.md rewritten for Assignment 3
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** The section outline required by the assignment guidelines (declaration, usage log, commit audit, reflection, learning outcomes).
+- **What I Changed:** Wrote all reflections, challenges and code adaptations in my own words and matched every entry to the evidence log.
 
-### Commit 17: `commit-17-technical-documentation`
+### Commit 10: `commit-10-technical-documentation`
 
 - **Commit Message:** Update the technical documentation
-- **Commit Description:** docs/technical-documentation.md rewritten for Assignment 2
-- **AI Assisted:** Yes (Claude 3.5 Sonnet)
-- **What AI Suggested:** Formatting the technical specifications and data schema descriptions for clarity.
-- **What I Changed:** Verified all technical details against the actual vanilla JS implementation; documented the testing matrix across screen sizes and browser configurations.
+- **Commit Description:** docs/technical-documentation.md rewritten for Assignment 3
+- **AI Assisted:** Yes (Claude)
+- **What AI Suggested:** Formatting the state description, the project pipeline and the API request as short code blocks.
+- **What I Changed:** Verified every technical detail against the actual code, wrote the testing list from what I tested in Chrome at three widths, and documented the known limitations.
 
-### Commit 18: `commit-18-update-readme`
+### Commit 11: `commit-11-update-readme`
 
 - **Commit Message:** Update the README
-- **Commit Description:** Features, project structure and setup for Assignment 2
+- **Commit Description:** What is new, configuration, structure and setup for Assignment 3
 - **AI Assisted:** No (Manual Implementation)
-- **Details:** Updated the root `README.md` to document Assignment 2 features, project setup instructions, and links to technical documentation and live deployment.
+- **Details:** Updated the root `README.md` with the requirements table, the exercises section, the configuration values, the project structure and the things to try.
 
 ---
 
@@ -175,21 +123,23 @@ Below is the complete audit of each commit for Assignment 2, documenting whether
 
 ### Benefits
 
-- **Rapid Debugging & Exploration:** Claude helped diagnose tricky state-collision issues quickly (e.g., combining live text search with category filter chips).
-- **Accessibility Standards:** Guided the addition of essential accessibility attributes (`aria-pressed`, `aria-invalid`, `aria-describedby`, and ARIA live regions) which make the portfolio accessible to screen readers.
+- **Boilerplate in minutes:** The fetch wrapper, the cache helpers and the state helpers took minutes, which left time for the logic, the copy and testing the edge cases.
+- **Listing what can go wrong:** Claude was good at naming failure cases I had not thought of, such as a request that hangs without ever failing, rate limits and full storage.
+- **Platform features explained:** `Intl.DateTimeFormat` with a time zone, `AbortController` and `sessionStorage` versus `localStorage` were explained clearly enough that I could read the MDN pages and use them with confidence.
 
 ### Challenges & Overcoming Them
 
-- **Code Style Inconsistency:** The AI often suggested mixed modern ES6+ idioms (arrow functions, template literals) that clashed with the clean vanilla JavaScript structure of Assignment 1. I refactored all snippets to maintain consistent syntax throughout.
-- **Feature Creep:** Initial AI suggestions included complex sorting dropdowns and external packages. I intentionally stripped these out to keep the codebase pure vanilla HTML/CSS/JS in line with course rubrics.
-- **Vague Messaging:** Default AI validation error messages were generic ("Invalid input"). I rewrote every user-facing message into friendly, clear, and actionable feedback.
+- **Deciding what not to keep:** It suggested saving the search text too. In testing, opening the site the next day with an old search felt broken, so I only save the filter and the sort. Deciding what not to persist was part of the work.
+- **Vague messages:** Generated error and status text was generic. I rewrote every message so it says what happened and what to do next.
+- **Over-abstraction:** Some suggested code was more abstract than the page needs (a generic data-source class). I kept the simpler functions because there is exactly one API call.
 
 ---
 
 ## 4. Learning Outcomes
 
-1. **State Management in Vanilla JS:** Understanding how to unify multiple filter conditions (`activeFilter` + `query`) into a single declarative predicate function `matches(project)`.
-2. **Accessible Native Dialogs:** Using the HTML5 `<dialog>` element with `showModal()`, managing keyboard focus traps, backdrop dismissal, and restoring focus to the triggering element.
-3. **Form Resilience & Storage:** Implementing debounced autosave with `localStorage` (`JSON.stringify`/`JSON.parse`), handling storage quota exceptions safely, and implementing accessible form validation.
-4. **Performance & Motion:** Employing `IntersectionObserver` for scroll-triggered animations while honoring user preferences via `prefers-reduced-motion`.
-5. **Responsible AI Co-Development:** Learning how to treat AI as an interactive tutor and brainstorming assistant rather than an unquestioned code generator.
+1. **REST APIs in the browser:** Fetching JSON, checking HTTP status codes, and cancelling a request with `AbortController`.
+2. **Caching with an expiry:** Keeping an API response in `sessionStorage` with a timestamp, and why session storage (not local storage) is the right place for data that goes stale.
+3. **State in one place:** Keeping application state in one object with a single save path, and validating saved values against the current data.
+4. **Composing array logic:** `filter`, then `slice`, then `sort` with comparators stored as data.
+5. **Performance basics:** Deferred scripts, lazy images with explicit sizes, a locally served font and a cached API response.
+6. **Responsible AI co-development:** Treating the tool as a reviewer and tutor; every generated function was read, tested (including the failure cases) and edited to match the style of the rest of the code before it stayed.

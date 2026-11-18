@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Portfolio content (Assignment 2)
+   Portfolio content (Assignment 3)
    Everything here comes from my ITD 211 Digital Visualization design journal
    (term 251): the three projects, three selected assignments and six selected in-class exercises.
    The objectives, process notes and reflections are the journal's own text.
