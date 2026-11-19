@@ -1,58 +1,53 @@
-# Jomanah Alshammary – Portfolio Website (Assignment 2)
+# Jomanah Alshammary – Portfolio Website (Assignment 3)
 
-The second version of my portfolio for SWE 363 (Web Engineering) at KFUPM. It keeps the
-layout and content of Assignment 1 and adds interactivity: the projects are rendered from
-data and can be filtered and searched, each project has a notes popup, the contact form
-validates every field and remembers a draft, and sections fade in as you scroll.
-Still plain HTML, CSS and JavaScript.
+The third version of my portfolio for SWE 363 (Web Engineering) at KFUPM. It adds live data
+from a public API, sorting on top of filtering and search, a section for my in-class
+exercises, a contact form that adapts to the chosen topic, and one central state object that
+is saved between visits. Plain HTML, CSS and JavaScript.
 
-Live site: https://202271260-jomanahalshammery-assignment-2.vercel.app
+Live site: https://202271260-jomanahalshammery-assignment-3.vercel.app
 
-## Features
+## What is new
 
-**Dynamic content**
+| Requirement      | How it is met                                                                                                                                                                                                                                                                                                                                                                                  |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| API integration  | The Contact section shows a live line such as "It's 3:40 PM in Khobar, 38° and clear skies", using the Open-Meteo weather API (no key needed). It has a loading state, a friendly fallback if the request fails, a timeout, and the result is cached in `sessionStorage` for ten minutes.                                                                                                      |
+| Complex logic    | Projects pass through three steps: filter by tool, search by text, then one of four sort orders (Journal order, Title A–Z, Title Z–A, Projects first). The contact form validates in two steps (all fields present, then email format and message length) and changes its hint and confirmation depending on the topic you choose. Weather codes from the API are translated into plain words. |
+| State management | One `state` object holds the active filter, the sort order and whether the exercises list is open. It is read and written through two helper functions and saved under one `localStorage` key, so those choices survive a reload. The theme and the form draft are also saved. Saved values are checked against the current data on load.                                                      |
+| Performance      | Scripts are deferred, images are resized JPEGs with `loading="lazy"` and explicit sizes, the font is served from the repository, API responses are cached, and the stylesheet has no unused rules.                                                                                                                                                                                             |
 
-- The six projects live in `js/data.js` and are rendered by `js/script.js`.
-- Filter buttons (All, Blender, Photoshop, InDesign) and a search box work together. A
-  counter shows how many projects match, a *Clear filters* link resets both, and an empty
-  state appears when nothing matches.
-- *Process & notes* on each card opens a popup with the project's process and what I learned.
+Everything from the earlier versions is still here: light and dark mode, responsive layout,
+mobile menu, typed tagline, filter and search, notes popup, saved drafts, scroll reveal, image
+viewer.
 
-**Data handling**
+## In-class exercises
 
-- The theme choice is saved in `localStorage`.
-- The contact form checks each field (required, email format, minimum message length) when
-  you leave it and again on submit. Errors appear under the field that has the problem and
-  focus moves to the first one.
-- What you type in the form is saved as a draft in `localStorage` and restored after a
-  refresh. A successful submit clears it.
+Below the projects there is a section with six exercises from my design journal (mood board,
+postcard, logo redesign, Blender modifiers, Blender nodes, sculpting). A button shows or hides
+the list and remembers your choice; each entry expands to show the objective, the process and
+what I took from it, with screenshots.
 
-**Animation**
+## Configuration
 
-- Sections fade and slide in the first time they enter the viewport.
-- Newly filtered cards fade in with a small stagger.
-- The form status message fades in; buttons, cards and links have hover states.
+`js/config.js` holds the location used for the weather line and the cache time:
 
-**Feedback**
-
-- Field-level error messages, a general message on failed submit, a confirmation on success,
-  a "Draft saved" note, the result counter and the empty state all tell the visitor what
-  happened and what to do next.
-
-Also included from the first version: light and dark mode, responsive layout, mobile menu,
-typed hero tagline, image viewer for the covers.
+```js
+location: { name: 'Khobar', latitude: 26.2172, longitude: 50.1971, timezone: 'Asia/Riyadh' },
+cacheMinutes: 10
+```
 
 ## Project structure
 
 ```
-assignment-2/
+assignment-3/
 ├── README.md
 ├── index.html
 ├── css/
 │   └── styles.css
 ├── js/
-│   ├── data.js           project content and filter list
-│   └── script.js         behaviour
+│   ├── config.js         location and cache settings
+│   ├── data.js           projects, filters, sort orders, exercises
+│   └── script.js         behaviour, ten numbered parts
 ├── assets/
 │   ├── fonts/
 │   └── images/
@@ -67,19 +62,24 @@ assignment-2/
 No installation. Open `index.html` directly, or serve the folder:
 
 ```bash
-# inside the assignment-2 folder, pick one
+# inside the assignment-3 folder, pick one
 npx serve .
 python -m http.server 8000
 ```
 
-Then open `http://localhost:3000` or `http://localhost:8000`. The site works offline.
+The weather request works from `file://` as well as from a server. Without internet the rest
+of the page works normally and the weather line says the weather is unavailable.
+
+Things to try: change the sort and pick a filter, then reload. Open the exercises, expand one,
+reload. Choose different topics in the contact form and watch the hint change. Set the browser
+to offline and reload to see the weather fallback.
 
 ## AI use
 
-I used Claude as an assistant for this assignment, mainly to work out how to combine the
-filter and the search into one function, to learn how the `<dialog>` element behaves, and to
-review the form for accessibility. Everything was tested and edited before it stayed in the
-code. See [docs/ai-usage-report.md](docs/ai-usage-report.md).
+I used Claude as an assistant for this assignment: to design the single state object, to
+structure the filter → search → sort pipeline, to handle the failure cases of the API call,
+and to review the new controls for accessibility. All code was tested and edited by me. See
+[docs/ai-usage-report.md](docs/ai-usage-report.md).
 
 ## Technical notes
 
